@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강하중학교 디통 - 샌드위치 알고리즘 마인드맵</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icon Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: white !important;
+            }
+            #final-landing-poster {
+                display: block !important;
+            }
+        }
+
+        /* Custom scrollbar for mindmap preview */
+        .custom-scroll::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .mindmap-node {
+            transition: all 0.3s ease;
+        }
+        .mindmap-node:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+    <!-- App Header -->
+    <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-amber-400 text-slate-900 font-extrabold text-xs px-2.5 py-1 rounded-lg">
+                    강하중 디통
+                </div>
+                <h1 class="font-bold text-lg md:text-xl flex items-center gap-2">
+                    🥪 샌드위치 알고리즘 만들기 프로젝트
+                </h1>
+            </div>
+            <div class="flex items-center space-x-2 text-sm font-medium">
+                <span id="current-step-badge" class="bg-emerald-700 px-3 py-1 rounded-full text-xs font-semibold">Step 1 / 7</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+        
+        <!-- Progress Stepper Navigation -->
+        <div class="mb-8 no-print">
+            <div class="flex items-center justify-between relative max-w-4xl mx-auto">
+                <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-slate-200 -z-10"></div>
+                <div id="progress-line" class="absolute left-0 top-1/2 transform -translate-y-1/2 h-1 bg-emerald-500 transition-all duration-300 -z-10" style="width: 0%;"></div>
+                
+                <button onclick="goToStep(1)" class="step-btn w-9 h-9 rounded-full flex items-center justify-center bg-emerald-600 text-white font-bold shadow text-xs transition-transform hover:scale-105" data-step="1">1</button>
+                <button onclick="goToStep(2)" class="step-btn w-9 h-9 rounded-full flex items-center justify-center bg-slate-200 text-slate-600 font-bold shadow text-xs transition-transform hover:scale-105" data-step="2">2</button>
+                <button onclick="goToStep(3)" class="step-btn w-9 h-9 rounded-full flex items-center justify-center bg-slate-200 text-slate-600 font-bold shadow text-xs transition-transform hover:scale-105" data-step="3">3</button>
+                <button onclick="goToStep(4)" class="step-btn w-9 h-9 rounded-full flex items-center justify-center bg-slate-200 text-slate-600 font-bold shadow text-xs transition-transform hover:scale-105" data-step="4">4</button>
+                <button onclick="goToStep(5)" class="step-btn w-9 h-9 rounded-full flex items-center justify-center bg-slate-200 text-slate-600 font-bold shadow text-xs transition-transform hover:scale-105" data-step="5">5</button>
+                <button onclick="goToStep(6)" class="step-btn w-9 h-9 rounded-full flex items-center justify-center bg-slate-200 text-slate-600 font-bold shadow text-xs transition-transform hover:scale-105" data-step="6">6</button>
+                <button onclick="goToStep(7)" class="step-btn w-9 h-9 rounded-full flex items-center justify-center bg-slate-200 text-slate-600 font-bold shadow text-xs transition-transform hover:scale-105" data-step="7">7</button>
+            </div>
+            <div class="flex justify-between text-xs text-slate-500 max-w-4xl mx-auto mt-2 px-1 font-medium text-center">
+                <span class="w-14">모둠 구성</span>
+                <span class="w-14">재료&레시피</span>
+                <span class="w-14">단계 나누기</span>
+                <span class="w-14">단계 모듈화</span>
+                <span class="w-14">함수 만들기</span>
+                <span class="w-14">디버깅</span>
+                <span class="w-14">최종 제출</span>
+            </div>
+        </div>
+
+        <!-- FORM STEPS CONTENT -->
+        <div id="step-forms" class="no-print">
+            
+            <!-- STEP 1: 팀 구성 -->
+            <div id="step-1" class="step-content bg-white rounded-2xl shadow-sm border border-slate-200 p-6 max-w-3xl mx-auto">
+                <div class="border-b pb-4 mb-6">
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-users text-emerald-600"></i>
+                        1. 모둠 정보 및 팀원 소개
+                    </h2>
+                    <p class="text-slate-500 text-sm mt-1">프로젝트를 함께 진행할 모둠 이름과 팀원 정보를 입력해주세요.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">모둠 이름 (팀명)</label>
+                        <input type="text" id="group-name" value="맛있는 알고리즘 조" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="예: 샌드위치 마스터">
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">모둠장 이름</label>
+                            <input type="text" id="leader-name" value="김강하" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="이름 입력">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">모둠원 (쉼표로 구분)</label>
+                            <input type="text" id="members-name" value="이디통, 박코딩, 최서버" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="예: 홍길동, 김철수, 이영희">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">나만의 창의적인 샌드위치 이름 🥪</label>
+                        <input type="text" id="sandwich-goal" value="3층 치즈 크런치 샌드위치" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="예: 달콤고소 참치마요 샌드위치">
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                    <button onclick="nextStep()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm">
+                        재료 & 레시피 구상하기 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2: 노불(Fire-Free) 재료 선별 및 레시피 작성 -->
+            <div id="step-2" class="step-content hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-6 max-w-3xl mx-auto">
+                <div class="border-b pb-4 mb-6">
+                    <div class="flex justify-between items-center flex-wrap gap-2">
+                        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-carrot text-emerald-600"></i>
+                            2. 노불(Fire-Free) 재료 선별 & 레시피 구상
+                        </h2>
+                        <span class="bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                            <i class="fa-solid fa-fire-flame-curved"></i> 불 사용 절대 금지!
+                        </span>
+                    </div>
+                    <p class="text-slate-500 text-sm mt-1">학교 안전을 위해 **불(가스레인지, 불꽃)을 쓰지 않는 재료**만 선택하고, 우리 모둠만의 레시피 규칙을 세워주세요.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Rule Callout -->
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-amber-900 text-xs leading-relaxed flex items-start gap-3">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5"></i>
+                        <div>
+                            <strong class="font-bold text-sm block text-amber-900 mb-0.5">안전 가이드라인</strong>
+                            이미 조리가 완료되었거나, 생으로 먹을 수 있는 안전한 재료만 선택할 수 있습니다. (예: 식빵, 슬라이스 햄, 체다치즈, 양상추, 딸기잼, 마요네즈 등)
+                        </div>
+                    </div>
+
+                    <!-- Ingredient Choice Tag Grid -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">사용할 재료 선택 (클릭하여 선택/해제)</label>
+                        <div id="ingredient-tags" class="flex flex-wrap gap-2">
+                            <!-- Preset Ingredient Pills generated dynamically -->
+                        </div>
+                        <div class="flex gap-2 mt-3">
+                            <input type="text" id="custom-ingredient-input" class="flex-grow px-3 py-1.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500" placeholder="기타 직접 준비할 노불 재료 입력 (예: 바나나, 누텔라)">
+                            <button onclick="addCustomIngredient()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-4 py-2 rounded-xl font-semibold transition">추가</button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Recipe Notes -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">우리 모둠만의 샌드위치 레시피 규칙 & 재료 손질법</label>
+                        <textarea id="recipe-notes" rows="3" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm" placeholder="예: 
+1. 식빵 2장의 테두리를 칼로 자른다.
+2. 식빵 한 면에 딸기잼을 넓게 2스푼 바른다.
+3. 양상추는 물기를 잘 닦은 후 2장 올린다."></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="prevStep()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-6 py-2.5 rounded-xl transition">이전</button>
+                    <button onclick="nextStep()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm">
+                        다음 단계로 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: 알고리즘 큰 단계 나누기 -->
+            <div id="step-3" class="step-content hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-6 max-w-3xl mx-auto">
+                <div class="border-b pb-4 mb-6">
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-list-ol text-emerald-600"></i>
+                        3. 알고리즘 큰 단계 나누기 (전체 과정)
+                    </h2>
+                    <p class="text-slate-500 text-sm mt-1">샌드위치를 만들기 위해 필요한 전체 핵심 흐름을 큰 순서대로 나열해 봅시다.</p>
+                </div>
+
+                <div class="space-y-3" id="high-steps-container">
+                    <!-- Dynamic inputs will be inserted here -->
+                </div>
+
+                <button onclick="addHighStep()" class="mt-4 border-2 border-dashed border-emerald-300 text-emerald-600 hover:bg-emerald-50 w-full py-2.5 rounded-xl font-semibold transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> 큰 단계 추가하기
+                </button>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="prevStep()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-6 py-2.5 rounded-xl transition">이전</button>
+                    <button onclick="nextStep()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm">
+                        다음 단계로 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 4: 단계 모듈화 (하위 세부 단계) -->
+            <div id="step-4" class="step-content hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-6 max-w-4xl mx-auto">
+                <div class="border-b pb-4 mb-6">
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-sitemap text-emerald-600"></i>
+                        4. 단계 모듈화 (세부 단계 구체화)
+                    </h2>
+                    <p class="text-slate-500 text-sm mt-1">컴퓨터는 모호한 말을 이해하지 못합니다! 각 큰 단계마다 구체적인 행동을 적어주세요.</p>
+                </div>
+
+                <div id="modular-container" class="space-y-6">
+                    <!-- Rendered based on step inputs -->
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="prevStep()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-6 py-2.5 rounded-xl transition">이전</button>
+                    <button onclick="nextStep()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm">
+                        다음 단계로 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 5: 함수명 정의하기 -->
+            <div id="step-5" class="step-content hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-6 max-w-4xl mx-auto">
+                <div class="border-b pb-4 mb-6">
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-code text-emerald-600"></i>
+                        5. 컴퓨터와 소통하기 (함수 이름 붙이기)
+                    </h2>
+                    <p class="text-slate-500 text-sm mt-1">각 단계를 로봇/컴퓨터가 실행 가능한 함수(Function) 형태로 이름을 붙여보세요! (예: `재료준비()`, `prepare_bread()`) </p>
+                </div>
+
+                <div id="functions-container" class="space-y-4">
+                    <!-- Dynamic Function Inputs -->
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="prevStep()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-6 py-2.5 rounded-xl transition">이전</button>
+                    <button onclick="nextStep()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm">
+                        다음 단계로 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 6: 디버깅 및 조건 체크 -->
+            <div id="step-6" class="step-content hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-6 max-w-3xl mx-auto">
+                <div class="border-b pb-4 mb-6">
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-bug text-emerald-600"></i>
+                        6. 디버깅(Debugging) 및 오류 검증
+                    </h2>
+                    <p class="text-slate-500 text-sm mt-1">컴퓨터에게 시켰을 때 발생할 수 있는 황당한 오작동이나 예외 상황을 미리 예상해보세요!</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-amber-900 text-sm">
+                        <p class="font-bold mb-1"><i class="fa-solid fa-lightbulb text-amber-600"></i> 디버깅 팁!</p>
+                        "포장지를 안 까고 빵에 소스를 바르면 어떻게 될까?", "칼 잡는 방향을 안 알려주면?" 로봇이 실수하지 않도록 조건문이나 보완 명령을 적어주세요.
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">예상되는 로봇/컴퓨터의 오작동 (버그 사례)</label>
+                        <textarea id="bug-case" rows="2" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm" placeholder="예: 빵 비닐 포장지를 벗기지 않고 빵을 잘라버린다."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">어떻게 해결했나요? (수정된 규칙/조건문)</label>
+                        <textarea id="bug-fix" rows="2" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm" placeholder="예: '재료준비()' 단계 시작 전 '만약 포장지가 씌워져 있다면 비닐을 제거한다' 조건 추가"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="prevStep()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-6 py-2.5 rounded-xl transition">이전</button>
+                    <button onclick="nextStep()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm">
+                        마인드맵 & 결과물 보기 <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 7: 최종 결과물 랜딩페이지 -->
+            <div id="step-7" class="step-content hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6 flex flex-wrap justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">🎉 샌드위치 알고리즘 프로젝트 완성을 축하합니다!</h2>
+                        <p class="text-slate-500 text-sm">생성된 마인드맵과 보고서를 확인하고 발표 또는 제출용으로 활용하세요.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-print"></i> PDF/인쇄 출력
+                        </button>
+                        <button onclick="copySummaryText()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-copy"></i> 텍스트 복사
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Interactive Mindmap Visualizer Panel -->
+        <div id="mindmap-preview-section" class="mt-8">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="flex justify-between items-center mb-4 border-b pb-3">
+                    <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-diagram-project text-emerald-600"></i>
+                        샌드위치 알고리즘 마인드맵 (실시간 자동 생성)
+                    </h3>
+                    <span class="text-xs text-slate-400">입력 시 실시간 업데이트</span>
+                </div>
+                
+                <!-- Canvas / Visual Mindmap Container -->
+                <div id="mindmap-tree-container" class="custom-scroll overflow-x-auto p-6 bg-slate-50 rounded-xl min-h-[320px] flex justify-center items-center border border-slate-100">
+                    <!-- Dynamic Mindmap Visual will render here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- FINAL PRESENTATION LANDING POSTER (Appears at step 7) -->
+        <div id="final-landing-poster" class="mt-8 hidden space-y-6">
+            <div class="bg-gradient-to-br from-emerald-800 to-teal-900 text-white rounded-2xl p-8 shadow-xl text-center relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 text-emerald-700/30 text-9xl font-black select-none pointer-events-none">SANDWICH</div>
+                <span class="bg-amber-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wider mb-3 inline-block">강하중학교 디통 프로젝트</span>
+                <h1 id="poster-title" class="text-3xl md:text-4xl font-black mb-2">맛있는 알고리즘 조의 샌드위치 프로젝트</h1>
+                <p id="poster-sandwich" class="text-emerald-200 text-lg font-medium">목표: 치즈 클럽 샌드위치 만들기</p>
+                
+                <div class="mt-6 flex flex-wrap justify-center gap-6 text-sm text-emerald-100 border-t border-emerald-700/60 pt-4">
+                    <div><span class="font-bold text-amber-300">모둠장:</span> <span id="poster-leader">김강하</span></div>
+                    <div><span class="font-bold text-amber-300">모둠원:</span> <span id="poster-members">이디통, 박코딩, 최서버</span></div>
+                </div>
+            </div>
+
+            <!-- Grid Layout for Poster Content -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Selected Ingredients & Recipe -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2 border-b pb-2">
+                        <i class="fa-solid fa-basket-shopping text-emerald-600"></i> 노불 재료 & 레시피
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <span class="font-bold text-xs text-slate-500 block mb-1">선택한 노불(Fire-Free) 재료</span>
+                            <div id="poster-ingredients-list" class="flex flex-wrap gap-1.5">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <span class="font-bold text-xs text-slate-500 block mb-1">모둠 레시피 규칙</span>
+                            <div id="poster-recipe-text" class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-700 whitespace-pre-wrap leading-relaxed">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Functions Summary -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2 border-b pb-2">
+                        <i class="fa-solid fa-cubes text-emerald-600"></i> 알고리즘 함수 명세서
+                    </h3>
+                    <div id="poster-functions-list" class="space-y-3 text-sm">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Debugging Report -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2 border-b pb-2">
+                        <i class="fa-solid fa-shield-halved text-amber-600"></i> 디버깅 & 예외 처리 결과
+                    </h3>
+                    <div class="space-y-4 text-sm">
+                        <div class="bg-rose-50 p-3 rounded-xl border border-rose-100">
+                            <span class="font-bold text-rose-800 text-xs block mb-1">발견된 오작동 (Bug)</span>
+                            <p id="poster-bug" class="text-slate-700">빵 비닐을 벗기지 않고 자름</p>
+                        </div>
+                        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100">
+                            <span class="font-bold text-emerald-800 text-xs block mb-1">개선된 디버깅 솔루션 (Fix)</span>
+                            <p id="poster-fix" class="text-slate-700">시작 전 비닐 제거 조건 추가</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Toast Popup Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl transition-all duration-300 opacity-0 pointer-events-none translate-y-2 z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-message">알림 메시지</span>
+    </div>
+
+    <script>
+        // Data State Variables
+        let currentStep = 1;
+
+        const presetIngredients = [
+            "식빵", "토스트빵", "크로아상", "체다치즈", "슬라이스햄", "훈제닭가슴살",
+            "양상추", "토마토", "피클", "계란샐러드", "참치마요", "딸기잼",
+            "마요네즈", "머스타드", "누텔라", "버터"
+        ];
+
+        let selectedIngredients = ["식빵", "체다치즈", "슬라이스햄", "양상추", "마요네즈"];
+        
+        let highSteps = [
+            "재료 준비",
+            "빵 자르기",
+            "재료 쌓기",
+            "빵 덮기",
+            "접시에 담기"
+        ];
+
+        let subSteps = {
+            0: ["냉장고에서 재료 꺼내기", "재료 씻기", "도마에 놓기"],
+            1: ["빵의 크기 확인하기", "칼로 빵 반 자르기"],
+            2: ["빵 위에 소스 바르기", "야채 올리기", "치즈와 햄 추가하기"],
+            3: ["다른 빵 조각을 위에 덮기"],
+            4: ["샌드위치를 접시에 옮기기", "장식 추가하기"]
+        };
+
+        let functionNames = {
+            0: "재료준비()",
+            1: "빵자르기()",
+            2: "재료쌓기()",
+            3: "빵덮기()",
+            4: "접시에담기()"
+        };
+
+        window.onload = function() {
+            renderIngredientTags();
+            renderHighStepsInput();
+            renderModularInput();
+            renderFunctionsInput();
+            renderMindmap();
+            updateStepView();
+        };
+
+        /* Toast Helper */
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            if (!toast || !toastMsg) return;
+            toastMsg.innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+            }, 2500);
+        }
+
+        function renderIngredientTags() {
+            const container = document.getElementById('ingredient-tags');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const allIngs = Array.from(new Set([...presetIngredients, ...selectedIngredients]));
+            
+            allIngs.forEach(ing => {
+                const isSelected = selectedIngredients.includes(ing);
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                    isSelected 
+                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm scale-105' 
+                    : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
+                }`;
+                btn.innerHTML = `${isSelected ? '✓ ' : '+ '}${ing}`;
+                btn.onclick = () => toggleIngredient(ing);
+                container.appendChild(btn);
+            });
+        }
+
+        function toggleIngredient(ing) {
+            if (selectedIngredients.includes(ing)) {
+                selectedIngredients = selectedIngredients.filter(item => item !== ing);
+            } else {
+                selectedIngredients.push(ing);
+            }
+            renderIngredientTags();
+            renderMindmap();
+        }
+
+        function addCustomIngredient() {
+            const input = document.getElementById('custom-ingredient-input');
+            if (!input) return;
+            const val = input.value.trim();
+            if (val && !selectedIngredients.includes(val)) {
+                selectedIngredients.push(val);
+                input.value = '';
+                renderIngredientTags();
+                renderMindmap();
+                showToast(`'${val}' 재료가 추가되었습니다!`);
+            }
+        }
+
+        function renderHighStepsInput() {
+            const container = document.getElementById('high-steps-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            highSteps.forEach((step, index) => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center gap-2';
+                row.innerHTML = `
+                    <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 font-bold flex items-center justify-center text-xs flex-shrink-0">${index + 1}</span>
+                    <input type="text" value="${step}" onchange="updateHighStep(${index}, this.value)" class="flex-grow px-4 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm" placeholder="큰 단계 설명 입력">
+                    <button type="button" onclick="removeHighStep(${index})" class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center transition flex-shrink-0">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function updateHighStep(index, value) {
+            highSteps[index] = value;
+            renderMindmap();
+        }
+
+        function addHighStep() {
+            highSteps.push(`새 단계 ${highSteps.length + 1}`);
+            const newIndex = highSteps.length - 1;
+            subSteps[newIndex] = ["세부 행동 작성하기"];
+            functionNames[newIndex] = `step_${newIndex + 1}()`;
+            renderHighStepsInput();
+            renderModularInput();
+            renderFunctionsInput();
+            renderMindmap();
+        }
+
+        function removeHighStep(index) {
+            if (highSteps.length <= 1) {
+                showToast("최소 1개 이상의 단계가 필요합니다.");
+                return;
+            }
+            highSteps.splice(index, 1);
+            
+            // Re-key subSteps and functionNames
+            const newSubSteps = {};
+            const newFunctions = {};
+            highSteps.forEach((_, i) => {
+                const oldKey = i >= index ? i + 1 : i;
+                newSubSteps[i] = subSteps[oldKey] || ["세부 행동 작성"];
+                newFunctions[i] = functionNames[oldKey] || `step_${i + 1}()`;
+            });
+            subSteps = newSubSteps;
+            functionNames = newFunctions;
+
+            renderHighStepsInput();
+            renderModularInput();
+            renderFunctionsInput();
+            renderMindmap();
+        }
+
+        function renderModularInput() {
+            const container = document.getElementById('modular-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            highSteps.forEach((step, highIdx) => {
+                const card = document.createElement('div');
+                card.className = 'border border-slate-200 rounded-2xl p-4 bg-slate-50/50 space-y-3';
+                
+                const subs = subSteps[highIdx] || [];
+                let subHtml = '';
+                subs.forEach((sub, subIdx) => {
+                    subHtml += `
+                        <div class="flex items-center gap-2 pl-4 border-l-2 border-emerald-400">
+                            <span class="text-xs font-semibold text-emerald-600">▶</span>
+                            <input type="text" value="${sub}" onchange="updateSubStep(${highIdx}, ${subIdx}, this.value)" class="flex-grow px-3 py-1.5 border rounded-xl text-xs bg-white focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="세부 동작 설명">
+                            <button type="button" onclick="removeSubStep(${highIdx}, ${subIdx})" class="text-slate-400 hover:text-rose-500 p-1 transition">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <span class="bg-emerald-600 text-white text-xs px-2 py-0.5 rounded-md">${highIdx + 1}단계</span>
+                            ${step}
+                        </span>
+                        <button type="button" onclick="addSubStep(${highIdx})" class="text-xs bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-3 py-1 rounded-lg font-semibold transition flex items-center gap-1">
+                            <i class="fa-solid fa-plus text-xs"></i> 세부단계 추가
+                        </button>
+                    </div>
+                    <div class="space-y-2">
+                        ${subHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function updateSubStep(highIdx, subIdx, value) {
+            if (!subSteps[highIdx]) subSteps[highIdx] = [];
+            subSteps[highIdx][subIdx] = value;
+            renderMindmap();
+        }
+
+        function addSubStep(highIdx) {
+            if (!subSteps[highIdx]) subSteps[highIdx] = [];
+            subSteps[highIdx].push("새 세부 동작");
+            renderModularInput();
+            renderMindmap();
+        }
+
+        function removeSubStep(highIdx, subIdx) {
+            if (subSteps[highIdx] && subSteps[highIdx].length > 1) {
+                subSteps[highIdx].splice(subIdx, 1);
+                renderModularInput();
+                renderMindmap();
+            } else {
+                showToast("최소 1개의 세부 동작이 필요합니다.");
+            }
+        }
+
+        function renderFunctionsInput() {
+            const container = document.getElementById('functions-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            highSteps.forEach((step, idx) => {
+                const fname = functionNames[idx] || `func_${idx + 1}()`;
+                const row = document.createElement('div');
+                row.className = 'flex items-center gap-3 bg-slate-50 border border-slate-200 p-3 rounded-xl';
+                row.innerHTML = `
+                    <div class="w-1/3 text-xs font-bold text-slate-700 flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">${idx + 1}</span>
+                        ${step}
+                    </div>
+                    <div class="flex-grow flex items-center gap-2">
+                        <span class="text-slate-400 text-xs font-mono">def</span>
+                        <input type="text" value="${fname}" onchange="updateFunctionName(${idx}, this.value)" class="w-full px-3 py-1.5 border rounded-xl text-xs font-mono bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-emerald-700 font-bold" placeholder="함수이름()">
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function updateFunctionName(idx, value) {
+            functionNames[idx] = value;
+            renderMindmap();
+        }
+
+        function renderMindmap() {
+            const container = document.getElementById('mindmap-tree-container');
+            if (!container) return;
+
+            const goalName = document.getElementById('sandwich-goal')?.value || "나만의 샌드위치";
+            const teamName = document.getElementById('group-name')?.value || "알고리즘 조";
+
+            let stepsHtml = '';
+            highSteps.forEach((step, idx) => {
+                const fname = functionNames[idx] || `step${idx+1}()`;
+                const subs = subSteps[idx] || [];
+
+                let subBullets = subs.map(s => `<li class="text-[11px] text-slate-600 flex items-center gap-1"><span class="text-emerald-500">•</span> ${s}</li>`).join('');
+
+                stepsHtml += `
+                    <div class="mindmap-node flex-shrink-0 bg-white border-2 border-emerald-500 rounded-2xl p-3 shadow-sm min-w-[200px] max-w-[240px] space-y-2">
+                        <div class="bg-emerald-50 p-2 rounded-xl border border-emerald-100 flex justify-between items-center">
+                            <span class="font-bold text-xs text-emerald-900">${idx + 1}. ${step}</span>
+                            <span class="text-[10px] bg-emerald-600 text-white font-mono px-1.5 py-0.5 rounded">${fname}</span>
+                        </div>
+                        <ul class="space-y-1 pl-1">
+                            ${subBullets || '<li class="text-[10px] text-slate-400">세부 동작 없음</li>'}
+                        </ul>
+                    </div>
+                `;
+            });
+
+            let ingredientsBadges = selectedIngredients.map(ing => 
+                `<span class="bg-amber-100 text-amber-900 border border-amber-200 text-[10px] font-semibold px-2 py-0.5 rounded-full">🥪 ${ing}</span>`
+            ).join(' ');
+
+            container.innerHTML = `
+                <div class="flex flex-col items-center gap-6 w-full py-2">
+                    <!-- Root Node -->
+                    <div class="mindmap-node bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-lg text-center">
+                        <span class="text-[10px] text-amber-400 font-bold block">${teamName}</span>
+                        <h4 class="font-extrabold text-base flex items-center justify-center gap-2">
+                            🥪 ${goalName}
+                        </h4>
+                    </div>
+
+                    <!-- Connect Line -->
+                    <div class="w-0.5 h-4 bg-slate-300"></div>
+
+                    <!-- Ingredients Branch -->
+                    <div class="bg-white border border-slate-200 px-4 py-2 rounded-xl shadow-xs text-center max-w-xl">
+                        <span class="text-[10px] font-bold text-slate-400 block mb-1">선택된 노불 재료 모듈</span>
+                        <div class="flex flex-wrap justify-center gap-1">
+                            ${ingredientsBadges || '<span class="text-xs text-slate-400">선택된 재료 없음</span>'}
+                        </div>
+                    </div>
+
+                    <!-- Connect Line -->
+                    <div class="w-0.5 h-4 bg-slate-300"></div>
+
+                    <!-- Step Branches Row -->
+                    <div class="flex flex-wrap justify-center items-start gap-4 w-full">
+                        ${stepsHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateStepView() {
+            document.getElementById('current-step-badge').innerText = `Step ${currentStep} / 7`;
+            
+            // Toggle Forms
+            document.querySelectorAll('.step-content').forEach((el, idx) => {
+                if (idx + 1 === currentStep) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            // Update Progress Bar Line
+            const progressPct = ((currentStep - 1) / 6) * 100;
+            document.getElementById('progress-line').style.width = `${progressPct}%`;
+
+            // Update Stepper Buttons
+            document.querySelectorAll('.step-btn').forEach((btn) => {
+                const stepNum = parseInt(btn.getAttribute('data-step'));
+                if (stepNum <= currentStep) {
+                    btn.classList.remove('bg-slate-200', 'text-slate-600');
+                    btn.classList.add('bg-emerald-600', 'text-white');
+                } else {
+                    btn.classList.remove('bg-emerald-600', 'text-white');
+                    btn.classList.add('bg-slate-200', 'text-slate-600');
+                }
+            });
+
+            // If Step 7, show poster & sync final data
+            if (currentStep === 7) {
+                document.getElementById('final-landing-poster').classList.remove('hidden');
+                syncFinalPosterData();
+            } else {
+                document.getElementById('final-landing-poster').classList.add('hidden');
+            }
+
+            renderMindmap();
+        }
+
+        function goToStep(step) {
+            currentStep = step;
+            if (currentStep === 4) renderModularInput();
+            if (currentStep === 5) renderFunctionsInput();
+            updateStepView();
+        }
+
+        function nextStep() {
+            if (currentStep < 7) {
+                currentStep++;
+                if (currentStep === 4) renderModularInput();
+                if (currentStep === 5) renderFunctionsInput();
+                updateStepView();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepView();
+            }
+        }
+
+        function syncFinalPosterData() {
+            const gName = document.getElementById('group-name')?.value || "모둠";
+            const leader = document.getElementById('leader-name')?.value || "미입력";
+            const members = document.getElementById('members-name')?.value || "미입력";
+            const goal = document.getElementById('sandwich-goal')?.value || "샌드위치";
+            const bug = document.getElementById('bug-case')?.value || "특이사항 없음";
+            const fix = document.getElementById('bug-fix')?.value || "특이사항 없음";
+            const recipeNotes = document.getElementById('recipe-notes')?.value || "작성된 레시피 규칙 없음";
+
+            document.getElementById('poster-title').innerText = `${gName}의 샌드위치 알고리즘`;
+            document.getElementById('poster-sandwich').innerText = `목표 샌드위치: ${goal}`;
+            document.getElementById('poster-leader').innerText = leader;
+            document.getElementById('poster-members').innerText = members;
+            document.getElementById('poster-bug').innerText = bug;
+            document.getElementById('poster-fix').innerText = fix;
+            document.getElementById('poster-recipe-text').innerText = recipeNotes;
+
+            // Render Ingredients Pills in Poster
+            const ingPosterContainer = document.getElementById('poster-ingredients-list');
+            ingPosterContainer.innerHTML = '';
+            if (selectedIngredients.length === 0) {
+                ingPosterContainer.innerHTML = `<span class="text-xs text-slate-400">선택된 재료 없음</span>`;
+            } else {
+                selectedIngredients.forEach(ing => {
+                    const span = document.createElement('span');
+                    span.className = "bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-full text-xs font-semibold";
+                    span.innerText = `🥪 ${ing}`;
+                    ingPosterContainer.appendChild(span);
+                });
+            }
+
+            // Render Functions List in Poster
+            const fnListContainer = document.getElementById('poster-functions-list');
+            fnListContainer.innerHTML = '';
+
+            highSteps.forEach((step, idx) => {
+                const fname = functionNames[idx] || `func${idx+1}()`;
+                const subs = subSteps[idx] || [];
+
+                const item = document.createElement('div');
+                item.className = "border border-slate-100 rounded-xl p-3 bg-slate-50";
+                item.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-slate-800 text-xs">${idx + 1}. ${step}</span>
+                        <code class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[11px] font-bold font-mono">${fname}</code>
+                    </div>
+                    <p class="text-[11px] text-slate-500">세부 동작: ${subs.join(' ➔ ') || '없음'}</p>
+                `;
+                fnListContainer.appendChild(item);
+            });
+        }
+
+        function copySummaryText() {
+            const gName = document.getElementById('group-name')?.value || "모둠";
+            const goal = document.getElementById('sandwich-goal')?.value || "샌드위치";
+            const recipeNotes = document.getElementById('recipe-notes')?.value || "";
+            
+            let text = `[강하중 디지털사회와 의사소통] 샌드위치 알고리즘 보고서\n`;
+            text += `■ 모둠명: ${gName}\n`;
+            text += `■ 목표 샌드위치: ${goal}\n`;
+            text += `■ 선택한 노불(Fire-Free) 재료: ${selectedIngredients.join(', ')}\n\n`;
+            text += `■ 나만의 레시피 규칙:\n${recipeNotes}\n\n`;
+            text += `■ 알고리즘 함수 단계:\n`;
+            
+            highSteps.forEach((step, i) => {
+                text += `${i+1}. ${step} [ ${functionNames[i] || `step_${i+1}()`} ]\n`;
+                const subs = subSteps[i] || [];
+                subs.forEach(s => text += `   - ${s}\n`);
+            });
+
+            text += `\n■ 디버깅 기록:\n`;
+            text += `- 오작동(Bug): ${document.getElementById('bug-case')?.value || '없음'}\n`;
+            text += `- 해결책(Fix): ${document.getElementById('bug-fix')?.value || '없음'}\n`;
+
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast("클립보드에 전체 내용이 복사되었습니다!");
+        }
+    </script>
+</body>
+</html>
